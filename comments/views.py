@@ -1,6 +1,7 @@
 from .models import Comment
 from django.utils import timezone
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 def index(request):
   if request.method == 'POST':
@@ -12,6 +13,7 @@ def index(request):
       ip_client = request.META.get('REMOTE_ADDR')
     new_comment = Comment(comment_text=comment_text, pub_date=timezone.now(), ip_client=ip_client, ip_server="")
     new_comment.save()
+    return HttpResponseRedirect('/')
   latest_comment_list = Comment.objects.order_by('-pub_date')
   context = {
         'latest_comment_list': latest_comment_list,
